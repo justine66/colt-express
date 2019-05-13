@@ -1,14 +1,18 @@
 package Vue;
 
-import java.applet.Applet;
+import java.awt.Container;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
+import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.TreeMap;
 
 import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
@@ -16,15 +20,12 @@ import modele.Bandit;
 import modele.Train;
 
 
-@SuppressWarnings("deprecation")
-public class Vue extends Applet{
+public class Vue extends Container{
 	
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-
+	protected Train t= new Train();
+	protected TreeMap<String, Bandit> l = new TreeMap<>();
+	
 	public void init() {
 		GridBagLayout gridbag = new GridBagLayout();
         GridBagConstraints c = new GridBagConstraints();
@@ -32,7 +33,8 @@ public class Vue extends Applet{
         setFont(new Font("SansSerif", Font.PLAIN, 14));
 		setLayout(gridbag);
 		
-		VueTrain vueT = new VueTrain(new Train());
+		
+		VueTrain vueT = new VueTrain(t);
 		c.fill = GridBagConstraints.BOTH;
 		c.gridx = 1;
 	    c.gridy = 1;
@@ -48,22 +50,25 @@ public class Vue extends Applet{
 		c.fill = GridBagConstraints.VERTICAL;
 	    c.gridx = 2;
 	    c.gridy = 3;
-	    makebutton("arrière", gridbag, c);
+
+	    makebutton("Arriere", gridbag, c);
+
+	    makebutton("Arrière", gridbag, c);
 
 	    c.fill = GridBagConstraints.VERTICAL;
 	    c.gridx = 3;
 	    c.gridy = 2;
-	    makebutton("haut", gridbag, c);
+	    makebutton("Haut", gridbag, c);
 		
 	    c.fill = GridBagConstraints.VERTICAL;
 	    c.gridx = 3;
 	    c.gridy = 4;
-	    makebutton("bas", gridbag, c);
+	    makebutton("Bas", gridbag, c);
 	    
 	    c.fill = GridBagConstraints.VERTICAL;
 	    c.gridx = 4;
 	    c.gridy = 3;
-	    makebutton("avant", gridbag, c);
+	    makebutton("Avant", gridbag, c);
 	    
 	    setSize(500, 500);	
 	    
@@ -79,7 +84,8 @@ public class Vue extends Applet{
 		gridbag.setConstraints(button, c);
 		add(button);
 	}
-	public class Boutton_Action extends AbstractAction {
+	
+	public  class Boutton_Action extends AbstractAction {
 		/**
 		 * 
 		 */
@@ -89,10 +95,25 @@ public class Vue extends Applet{
 			super(texte);
 		}
 	 
-		public void actionPerformed(ActionEvent e) { 
-			modele.Actions.deplacement(e.getActionCommand(), new Bandit (Train.NOM_BANDIT_1));
-		    System.out.println("action");
-		} 
+		public void actionPerformed(ActionEvent e, TreeMap<String, Bandit> l) { 
+			if (e.getActionCommand() != "Action !") { 
+				l.put(e.getActionCommand(), t.getBandit_1());
+			}
+			else{ 
+				System.out.println(l);
+				String key = l.firstKey();
+				Bandit value = l.get(key);
+				modele.Actions.deplacement(key, value);	
+				l.remove(key, value);
+				
+			} 
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			actionPerformed(e, l);
+			
+		}
 	}
 
 	public static void main(String[] args) throws InterruptedException {
@@ -105,9 +126,10 @@ public class Vue extends Applet{
 		fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    fenetre.setVisible(true);
 		fenetre.setLocation(10, 10);
-		System.out.println("fini");
 		
 		
 		
 	}
+
+	
 }

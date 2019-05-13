@@ -6,18 +6,23 @@ public class Train {
 	//attributs
 	public static final int  NB_WAGON = 4;
 	public static final String  NOM_BANDIT_1 = "Karl";
-	protected Bandit bandit_1;
+	private Bandit bandit_1;
 	protected ArrayList<Object> toits= new ArrayList<>();
 	protected ArrayList<Object> interieurs= new ArrayList<>();
 	
 	//constructeur
 	public Train (){
-		this.bandit_1 = new Bandit (NOM_BANDIT_1);	
+		this.setBandit_1(new Bandit (NOM_BANDIT_1));	
 	}
 
 	//methode
-	public Bandit get() {
+	
+	public Bandit getBandit_1() {
 		return bandit_1;
+	}
+
+	public void setBandit_1(Bandit bandit_1) {
+		this.bandit_1 = bandit_1;
 	}
 	
 }

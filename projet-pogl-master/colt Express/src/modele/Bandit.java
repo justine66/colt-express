@@ -11,9 +11,17 @@ public class Bandit {
 	//constructeur
 	public Bandit (String nom){
 		this.NOM = nom;
-		this.place = new int[2];
-		this.place[0] = 1;
-		this.place[1] = 0;
+		this.setPlace(new int[2]);
+		this.getPlace()[0] = 1;
+		this.getPlace()[1] = 0;
+	}
+
+	public int[] getPlace() {
+		return place;
+	}
+
+	public void setPlace(int[] place) {
+		this.place = place;
 	}
 	
 
