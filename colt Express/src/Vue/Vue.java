@@ -1,11 +1,11 @@
 package Vue;
 
-import java.applet.Applet;
-import java.awt.Font;
+
+import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
+import java.util.TreeMap;
 
 import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
@@ -16,21 +16,17 @@ import modele.Bandit;
 import modele.Train;
 
 
-@SuppressWarnings("deprecation")
-public class Vue extends Applet{
+public class Vue extends Container{
 	
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-	protected Train t= new Train();
+	protected static Train t= new Train();
+	protected TreeMap<String, Bandit> l = new TreeMap<>();
 	
 	public void init() {
 		GridBagLayout gridbag = new GridBagLayout();
         GridBagConstraints c = new GridBagConstraints();
 		
-        setFont(new Font("SansSerif", Font.PLAIN, 14));
+        //setFont(new Font("SansSerif", Font.PLAIN, 14));
 		setLayout(gridbag);
 		
 		
@@ -50,7 +46,7 @@ public class Vue extends Applet{
 		c.fill = GridBagConstraints.VERTICAL;
 	    c.gridx = 2;
 	    c.gridy = 3;
-	    makebutton("Arrière", gridbag, c);
+	    makebutton("Arriere", gridbag, c);
 
 	    c.fill = GridBagConstraints.VERTICAL;
 	    c.gridx = 3;
@@ -81,19 +77,34 @@ public class Vue extends Applet{
 		gridbag.setConstraints(button, c);
 		add(button);
 	}
-	public class Boutton_Action extends AbstractAction {
-		/**
-		 * 
-		 */
+	
+	public  class Boutton_Action extends AbstractAction {
+		
 		private static final long serialVersionUID = 1L;
 
 		public Boutton_Action(String texte){
 			super(texte);
 		}
 	 
-		public void actionPerformed(ActionEvent e) { 
-			modele.Actions.deplacement(e.getActionCommand(), t.getBandit_1());
-		} 
+		public void actionPerformed(ActionEvent e, TreeMap<String, Bandit> l) { 
+			if (e.getActionCommand() != "Action !") { 
+				l.put(e.getActionCommand(), t.getBandit_1());
+			}
+			else{ 
+				System.out.println(l);
+				String key = l.firstKey();
+				Bandit value = l.get(key);
+				modele.Actions.deplacement(key, value);	
+				l.remove(key, value);
+				
+			} 
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			actionPerformed(e, l);
+			
+		}
 	}
 
 	public static void main(String[] args) throws InterruptedException {
@@ -111,4 +122,6 @@ public class Vue extends Applet{
 		
 		
 	}
+
+	
 }
